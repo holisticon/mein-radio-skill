@@ -28,4 +28,4 @@ const station = function(callback, env) {
     });
 }
 
-module.exports = bytefm;
+module.exports = station;

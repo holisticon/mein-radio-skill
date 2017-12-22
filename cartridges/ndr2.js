@@ -1,6 +1,6 @@
 const http = require('http');
 
-const station = function (callback, env) {
+const station = function(callback, env) {
     http.get('http://www.ndr.de/public/radio_playlists/ndr2.json', function (result) {
         result.setEncoding('utf8');
         result.on('data', function (chunk) {
@@ -19,3 +19,5 @@ const station = function (callback, env) {
         console.log('Error: ' + err.message);
     });
 }
+
+module.exports = station;
