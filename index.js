@@ -34,18 +34,10 @@ const currentSong = function (env) {
 };
 
 const handlers = {
-    'AMAZON.StopIntent': function () {
-        this.emit(':tell', 'OK');
-    },
-    'AMAZON.CancelIntent': function () {
-        this.emit(':tell', 'OK');
-    },
-    'AMAZON.HelpIntent': function () {
-        this.emit(':tell', 'Frag mich nach dem aktuellen Titel');
-    },
-    'CurrentSongIntent': function () {
-        currentSong(this);
-    }
+    'AMAZON.StopIntent':    () => this.emit(':tell', 'OK'),
+    'AMAZON.CancelIntent':  () => this.emit(':tell', 'OK'),
+    'AMAZON.HelpIntent':    () => this.emit(':tell', 'Frag mich nach dem aktuellen Titel'),
+    'CurrentSongIntent':    () => currentSong(this)
 };
 
 
