@@ -12,7 +12,7 @@ const tellAlexa = function(song, env) {
 }
 
 const currentSong = function (env) {
-    const key = env.event.request.intent.slots.Station.value.trim().replace(" ", "").replace(".", "").toLowerCase();
+    const key = env.event.request.intent.slots.Station.value.trim().replace(/ /g, '').replace(/\./g, '').toLowerCase();
     console.log(key);
     const station = require("./cartridges/" + key + ".js");
     station(tellAlexa, env);
