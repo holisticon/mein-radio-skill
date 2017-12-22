@@ -10,12 +10,13 @@ const APP_ID = 'amzn1.ask.skill.50843b7a-5cb1-4288-b387-bc53186440c7';
 const tellAlexa = function(song) {
     const title = song.title.replace('&ndash;', '-');
     const ssmlTitle = `<prosody rate="slow">${title}</prosody>`;
-    env.emit(':tellWithCard', ssmlTitle, "Aktueller Song", title, song.image);
+    this.emit(':tellWithCard', ssmlTitle, "Aktueller Song", title, song.image);
 
 }
 
 const currentSong = function (env) {
-    console.log(env.event.request.intent.slots.Station.value);
+    const key = env.event.request.intent.slots.Station.value.trim().replace(" ", "").toLowerCase();
+    console.log(key);
     bytefm(tellAlexa);
 };
 
