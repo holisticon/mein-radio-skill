@@ -9,13 +9,28 @@ const tellAlexa = function(song, env) {
     const ssmlTitle = `<prosody rate="slow">${title}</prosody>`;
     env.emit(':tellWithCard', ssmlTitle, "Aktueller Song", title, song.image);
 
-}
+};
 
 const currentSong = function (env) {
     const key = env.event.request.intent.slots.Station.value.trim().replace(/ /g, '').replace(/\./g, '').toLowerCase();
     console.log(key);
-    const station = require("./cartridges/" + key + ".js");
-    station(tellAlexa, env);
+    const stationCartridge = "./cartridges/" + key + ".js";
+    try {
+        const station = require(stationCartridge);
+        station(tellAlexa, env);
+      } catch (e) {
+        if (e.code !== 'MODULE_NOT_FOUND') {
+          // Re-throw not "Module not found" errors
+          throw e;
+        }
+        if (e.message.indexOf(stationCartridge) === -1) {
+          // Re-throw not found errors for other modules
+          throw e;
+        }
+        const responseMessage = `Den Sender ${key} kenne ich noch nicht.`;
+        console.log(responseMessage);
+        env.emit(':tellWithCard',  responseMessage, 'Sender unbekannt', responseMessage);
+      }
 };
 
 const handlers = {
