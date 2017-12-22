@@ -5,7 +5,7 @@ const https = require('https');
 
 const APP_ID = 'amzn1.ask.skill.50843b7a-5cb1-4288-b387-bc53186440c7';  // TODO replace with your app ID (OPTIONAL).
 
-const currentSong = () => {
+const currentSong = (emit) => {
   https.get('https://www.byte.fm/ajax/song-history/', (resp) => {
     let data = '';
 
@@ -23,8 +23,7 @@ const currentSong = () => {
         "smallImageUrl": JSON.parse(data).artistImageURL,
         "largeImageUrl": JSON.parse(data).artistImageURL
       };
-      this.emit(':tellWithCard', ssmlTitle, "Aktueller Track",
-        title, image);
+      emit(':tellWithCard', ssmlTitle, "Aktueller Song", title, image);
     });
 
   }).on("error", (err) => {
@@ -42,8 +41,10 @@ const handlers = {
   'AMAZON.HelpIntent': () => {
     this.emit(':tell', 'Frag mich nach dem aktuellen Titel');
   },
-  'CurrentSongIntent': currentSong
-}
+  'CurrentSongIntent': () =>{
+    currentSong(this.emit);
+  }
+};
 
 
 exports.handler = (event, context) => {
