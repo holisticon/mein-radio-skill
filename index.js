@@ -3,53 +3,41 @@
 const Alexa = require('alexa-sdk');
 const https = require('https');
 
-const APP_ID = 'amzn1.ask.skill.50843b7a-5cb1-4288-b387-bc53186440c7';  // TODO replace with your app ID (OPTIONAL).
+const bytefm = require('./cartridges/bytefm.js');
 
-const currentSong = function(emit) {
-  https.get('https://www.byte.fm/ajax/song-history/', function(resp) {
-    let data = '';
+const APP_ID = 'amzn1.ask.skill.50843b7a-5cb1-4288-b387-bc53186440c7';
 
-    // A chunk of data has been recieved.
-    resp.on('data', function(chunk) {
-      data += chunk;
-    });
+const tellAlexa = function(song) {
+    const title = song.title.replace('&ndash;', '-');
+    const ssmlTitle = `<prosody rate="slow">${title}</prosody>`;
+    env.emit(':tellWithCard', ssmlTitle, "Aktueller Song", title, song.image);
 
-    // The whole response has been received. Print out the result.
-    resp.on('end', function() {
-      console.log(JSON.parse(data).current_show_title);
-      const title = JSON.parse(data).tracks[0].replace('&ndash;', '-');
-      const ssmlTitle = `<prosody rate="slow">${title}</prosody>`;
-      const image = {
-        "smallImageUrl": JSON.parse(data).artistImageURL,
-        "largeImageUrl": JSON.parse(data).artistImageURL
-      };
-      emit(':tellWithCard', ssmlTitle, "Aktueller Song", title, image);
-    });
+}
 
-  }).on("error", function(err) {
-    console.log("Error: " + err.message);
-  });
+const currentSong = function (env) {
+    console.log(env.event.request.intent.slots.Station.value);
+    bytefm(tellAlexa);
 };
 
 const handlers = {
-  'AMAZON.StopIntent': function() {
-    this.emit(':tell', 'OK');
-  },
-  'AMAZON.CancelIntent': function() {
-    this.emit(':tell', 'OK');
-  },
-  'AMAZON.HelpIntent': function() {
-    this.emit(':tell', 'Frag mich nach dem aktuellen Titel');
-  },
-  'CurrentSongIntent': function() {
-    currentSong(this.emit);
-  }
+    'AMAZON.StopIntent': function () {
+        this.emit(':tell', 'OK');
+    },
+    'AMAZON.CancelIntent': function () {
+        this.emit(':tell', 'OK');
+    },
+    'AMAZON.HelpIntent': function () {
+        this.emit(':tell', 'Frag mich nach dem aktuellen Titel');
+    },
+    'CurrentSongIntent': function () {
+        currentSong(this);
+    }
 };
 
 
-exports.handler = function(event, context) {
-  const alexa = Alexa.handler(event, context);
-  alexa.APP_ID = APP_ID;
-  alexa.registerHandlers(handlers);
-  alexa.execute();
+exports.handler = function (event, context) {
+    const alexa = Alexa.handler(event, context);
+    alexa.APP_ID = APP_ID;
+    alexa.registerHandlers(handlers);
+    alexa.execute();
 };
