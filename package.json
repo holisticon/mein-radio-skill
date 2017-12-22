@@ -1,10 +1,11 @@
 {
   "name": "mein-radio-skill",
   "version": "1.0.0",
-  "description": "Welcome to the AWS CodeStar sample Alexa Skill ==============================================",
+  "description": "Welcome to the Mein Radio Alexa Skill",
   "main": "index.js",
   "dependencies": {
     "alexa-sdk": "^1.0.10",
+    "http": "^0.0.0",
     "https": "^1.0.0"
   },
   "scripts": {
