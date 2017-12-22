@@ -2,22 +2,20 @@
 
 const Alexa = require('alexa-sdk');
 
-const bytefm = require('./cartridges/bytefm.js');
-const ndr2 = require('./cartridges/ndr2.js');
-
 const APP_ID = 'amzn1.ask.skill.50843b7a-5cb1-4288-b387-bc53186440c7';
 
-const tellAlexa = function(song) {
+const tellAlexa = function(song, env) {
     const title = song.title.replace('&ndash;', '-');
     const ssmlTitle = `<prosody rate="slow">${title}</prosody>`;
-    this.emit(':tellWithCard', ssmlTitle, "Aktueller Song", title, song.image);
+    env.emit(':tellWithCard', ssmlTitle, "Aktueller Song", title, song.image);
 
 }
 
 const currentSong = function (env) {
-    const key = env.event.request.intent.slots.Station.value.trim().replace(" ", "").toLowerCase();
+    const key = env.event.request.intent.slots.Station.value.trim().replace(" ", "").replace(".", "").toLowerCase();
     console.log(key);
-    bytefm(tellAlexa);
+    const station = require("./cartridges/" + key + ".js");
+    station(tellAlexa, env);
 };
 
 const handlers = {

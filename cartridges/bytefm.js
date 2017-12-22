@@ -1,6 +1,6 @@
 const https = require('https');
 
-const bytefm = function(callback) {
+const bytefm = function(callback, env) {
     https.get('https://www.byte.fm/ajax/song-history/', function (resp) {
         let data = '';
 
@@ -20,7 +20,7 @@ const bytefm = function(callback) {
                     "largeImageUrl": json.artistImageURL
                 }
             }
-            callback(song);
+            callback(song, env);
         });
 
     }).on("error", function (err) {
