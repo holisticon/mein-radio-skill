@@ -1,0 +1,23 @@
+{
+  "name": "mein-radio-skill",
+  "version": "1.0.0",
+  "description": "Welcome to the AWS CodeStar sample Alexa Skill ==============================================",
+  "main": "index.js",
+  "dependencies": {
+    "alexa-sdk": "^1.0.10",
+    "https": "^1.0.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/holisticon/mein-radio-skill.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/holisticon/mein-radio-skill/issues"
+  },
+  "homepage": "https://github.com/holisticon/mein-radio-skill#readme"
+}
