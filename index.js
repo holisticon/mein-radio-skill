@@ -5,7 +5,7 @@ const https = require('https');
 
 const APP_ID = 'amzn1.ask.skill.50843b7a-5cb1-4288-b387-bc53186440c7';  // TODO replace with your app ID (OPTIONAL).
 
-const currentSong = (emit) => {
+const currentSong = () => {
   https.get('https://www.byte.fm/ajax/song-history/', (resp) => {
     let data = '';
 
@@ -23,7 +23,7 @@ const currentSong = (emit) => {
         "smallImageUrl": JSON.parse(data).artistImageURL,
         "largeImageUrl": JSON.parse(data).artistImageURL
       };
-      emit(':tellWithCard', ssmlTitle, "Aktueller Track",
+      this.emit(':tellWithCard', ssmlTitle, "Aktueller Track",
         title, image);
     });
 
@@ -33,20 +33,20 @@ const currentSong = (emit) => {
 };
 
 const handlers = {
-  'AMAZON.StopIntent': function () {
+  'AMAZON.StopIntent': () => {
     this.emit(':tell', 'OK');
   },
-  'AMAZON.CancelIntent': function () {
+  'AMAZON.CancelIntent': () => {
     this.emit(':tell', 'OK');
   },
-  'AMAZON.HelpIntent': function () {
+  'AMAZON.HelpIntent': () => {
     this.emit(':tell', 'Frag mich nach dem aktuellen Titel');
   },
-  'CurrentSongIntent': currentSong(this.emit);
+  'CurrentSongIntent': currentSong
 }
 
 
-exports.handler = function (event, context) {
+exports.handler = (event, context) => {
   const alexa = Alexa.handler(event, context);
   alexa.APP_ID = APP_ID;
   alexa.registerHandlers(handlers);
