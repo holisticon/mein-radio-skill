@@ -1,6 +1,6 @@
 const https = require('https');
 
-const bytefm = function(callback, env) {
+const station = function(callback, env) {
     https.get('https://www.byte.fm/ajax/song-history/', function (resp) {
         let data = '';
 
