@@ -56,7 +56,7 @@ function getSlotValues (filledSlots) {
                 case "ER_SUCCESS_MATCH":
                     slotValues[name] = {
                         "synonym": filledSlots[item].value,
-                        "resolved": filledSlots[item].resolutions.resolutionsPerAuthority[0].values[0].value.name,
+                        "resolved": filledSlots[item].resolutions.resolutionsPerAuthority[0].values[0].value.id,
                         "isValidated": true
                     };
                     break;
