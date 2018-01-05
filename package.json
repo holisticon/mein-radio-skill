@@ -5,7 +5,6 @@
   "main": "index.js",
   "dependencies": {
     "alexa-sdk": "^1.0.10",
-    "http": "^0.0.0",
     "https": "^1.0.0"
   },
   "scripts": {
