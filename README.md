@@ -31,4 +31,4 @@ Use SAM Local and test JSON files for local testing (manually).
 
 https://docs.aws.amazon.com/lambda/latest/dg/test-sam-local.html?shortFooter=true
 
-'sam local invoke -e test/bytefm.json'
+`sam local invoke -e test/bytefm.json`
