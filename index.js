@@ -13,24 +13,20 @@ const tellAlexa = function(song, env) {
 
 const currentSong = function (env) {
   const slotValues = getSlotValues(env.event.request.intent.slots);
-  const key = slotValues.Station.resolved.toLowerCase();
-  console.log(key);
-  const stationCartridge = "./cartridges/" + key + ".js";
-  try {
+  if (slotValues.Station === undefined) {
+    const errorResponseMessage = 'Ich habe den Sender nicht verstanden.';
+    console.info(errorResponseMessage);
+    env.emit(':tell', errorResponseMessage);
+  } else if (!slotValues.Station.isValidated) {
+    const errorResponseMessage = `Den Sender ${slotValues.Station.synonym} kenne ich noch nicht.`;
+    console.info(errorResponseMessage);
+    env.emit(':tellWithCard', errorResponseMessage, 'Unbekannter Sender', responseMessage);
+  } else {
+    const stationKey = slotValues.Station.resolved.toLowerCase();
+    console.log(stationKey);
+    const stationCartridge = "./cartridges/" + stationKey + ".js";
     const station = require(stationCartridge);
     station(tellAlexa, env);
-  } catch (e) {
-    if (e.code !== 'MODULE_NOT_FOUND') {
-      // Re-throw not "Module not found" errors
-      throw e;
-    }
-    if (e.message.indexOf(stationCartridge) === -1) {
-      // Re-throw not found errors for other modules
-      throw e;
-    }
-    const responseMessage = `Den Sender ${key} kenne ich noch nicht.`;
-    console.log(responseMessage);
-    env.emit(':tellWithCard',  responseMessage, 'Sender unbekannt', responseMessage);
   }
 };
 
