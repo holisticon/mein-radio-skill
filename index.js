@@ -4,8 +4,25 @@ const Alexa = require('alexa-sdk');
 
 const APP_ID = 'amzn1.ask.skill.50843b7a-5cb1-4288-b387-bc53186440c7';
 
+const escapeChars = {
+  '&ndash;' : '-',
+  "'" : '&apos;',
+  '"' : '&quot;',
+  '&' : '&amp;',
+  '<' : '&lt;',
+  '>' : '&gt;'
+};
+
+const escapeSSML = function (unescaped) {
+  let escaped = unescaped;
+  for (let key in escapeChars) {
+    escaped = escaped.replace(key, escapeChars[key]);
+  }
+  return escaped;
+};
+
 const tellAlexa = function(song, env) {
-  const title = song.title.replace('&ndash;', '-');
+  const title = escapeSSML(song.title);
   const ssmlTitle = `<prosody rate="slow">${title}</prosody>`;
   env.emit(':tellWithCard', ssmlTitle, "Aktueller Song", title, song.image);
 
