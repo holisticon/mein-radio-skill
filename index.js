@@ -20,7 +20,7 @@ const currentSong = function (env) {
   } else if (!slotValues.Station.isValidated) {
     const errorResponseMessage = `Den Sender ${slotValues.Station.synonym} kenne ich noch nicht.`;
     console.info(errorResponseMessage);
-    env.emit(':tellWithCard', errorResponseMessage, 'Unbekannter Sender', responseMessage);
+    env.emit(':tellWithCard', errorResponseMessage, 'Unbekannter Sender', errorResponseMessage);
   } else {
     const stationKey = slotValues.Station.resolved.toLowerCase();
     console.log(stationKey);
