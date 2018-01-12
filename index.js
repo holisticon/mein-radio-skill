@@ -1,11 +1,11 @@
 'use strict';
 
 const Alexa = require('alexa-sdk');
-
+const Entities = require('html-entities').AllHtmlEntities;
+const entities = new Entities();
 const APP_ID = 'amzn1.ask.skill.50843b7a-5cb1-4288-b387-bc53186440c7';
 
-const escapeChars = {
-  '&ndash;' : '-',
+const encodeXmlCtrlChars = {
   "'" : '&apos;',
   '"' : '&quot;',
   '&' : '&amp;',
@@ -14,9 +14,9 @@ const escapeChars = {
 };
 
 const escapeSSML = function (unescaped) {
-  let escaped = unescaped;
-  for (let key in escapeChars) {
-    escaped = escaped.replace(key, escapeChars[key]);
+  let escaped = entities.decode(unescaped); // decode all entities by default
+  for (let key in encodeXmlCtrlChars) { // only encode XML control characters
+    escaped = escaped.replace(key, encodeXmlCtrlChars[key]);
   }
   return escaped;
 };
