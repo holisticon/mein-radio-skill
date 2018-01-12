@@ -13,20 +13,22 @@ const tellAlexa = function(song, env) {
 
 const currentSong = function (env) {
   const slotValues = getSlotValues(env.event.request.intent.slots);
-  if (slotValues.Station === undefined) {
+  if (slotValues.Station && slotValues.Station.synonym) {
+    if (slotValues.Station.isValidated) {
+      const stationKey = slotValues.Station.resolved.toLowerCase();
+      console.log(stationKey);
+      const stationCartridge = "./cartridges/" + stationKey + ".js";
+      const station = require(stationCartridge);
+      station(tellAlexa, env);
+    } else {
+      const errorResponseMessage = `Den Sender ${slotValues.Station.synonym} kenne ich noch nicht.`;
+      console.info(errorResponseMessage);
+      env.emit(':tellWithCard', errorResponseMessage, 'Unbekannter Sender', errorResponseMessage);
+    }
+  } else {
     const errorResponseMessage = 'Ich habe den Sender nicht verstanden.';
     console.info(errorResponseMessage);
     env.emit(':tell', errorResponseMessage);
-  } else if (!slotValues.Station.isValidated) {
-    const errorResponseMessage = `Den Sender ${slotValues.Station.synonym} kenne ich noch nicht.`;
-    console.info(errorResponseMessage);
-    env.emit(':tellWithCard', errorResponseMessage, 'Unbekannter Sender', errorResponseMessage);
-  } else {
-    const stationKey = slotValues.Station.resolved.toLowerCase();
-    console.log(stationKey);
-    const stationCartridge = "./cartridges/" + stationKey + ".js";
-    const station = require(stationCartridge);
-    station(tellAlexa, env);
   }
 };
 
